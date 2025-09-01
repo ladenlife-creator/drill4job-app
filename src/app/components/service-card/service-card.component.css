@@ -1,0 +1,80 @@
+.service-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 140px;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.service-content {
+  flex: 1;
+}
+
+.service-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.service-price {
+  font-size: 14px;
+  color: #4A90E2;
+  font-weight: 500;
+  margin: 0;
+}
+
+.service-rating {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.rating-badge {
+  background: #FFD700;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+@media (max-width: 768px) {
+  .service-card {
+    padding: 16px;
+    min-height: 120px;
+  }
+  
+  .service-icon {
+    font-size: 32px;
+  }
+  
+  .service-name {
+    font-size: 16px;
+  }
+  
+  .service-price {
+    font-size: 13px;
+  }
+}
+

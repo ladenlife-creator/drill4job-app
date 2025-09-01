@@ -1,0 +1,26 @@
+<div class="app-container">
+  <app-header></app-header>
+  
+  <div class="search-container">
+    <input type="text" class="search-input" placeholder="Qual serviço domiciliário precisas?">
+  </div>
+  
+  <app-location-bar></app-location-bar>
+  
+  <div class="emergency-banner">
+    <span class="emergency-icon">🚨</span>
+    <span class="emergency-text">Serviços de Emergência 24/7 Disponíveis</span>
+  </div>
+  
+  <main class="main-content">
+    <h2 class="section-title">Selecione um Serviço</h2>
+    
+    <div class="services-grid">
+      <app-service-card 
+        *ngFor="let service of services" 
+        [service]="service">
+      </app-service-card>
+    </div>
+  </main>
+</div>
+

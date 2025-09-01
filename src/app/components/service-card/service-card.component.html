@@ -1,0 +1,11 @@
+<div class="service-card" (click)="onServiceClick()">
+  <div class="service-icon">{{ service.icon }}</div>
+  <div class="service-content">
+    <h3 class="service-name">{{ service.name }}</h3>
+    <p class="service-price">A partir de {{ service.price }} {{ service.currency }}</p>
+  </div>
+  <div class="service-rating">
+    <span class="rating-badge">★ {{ service.rating }}</span>
+  </div>
+</div>
+
