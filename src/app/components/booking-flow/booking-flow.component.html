@@ -1,0 +1,130 @@
+<div class="booking-flow-container">
+  <!-- Status do Booking -->
+  <div *ngIf="currentBooking" class="booking-status-card bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Status do Serviço</h3>
+      <span class="px-3 py-1 rounded-full text-sm font-medium" 
+            [class]="getStatusColor()">
+        {{ getStatusText() }}
+      </span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+      <div>
+        <span class="text-gray-600">Serviço:</span>
+        <span class="font-medium ml-2">{{ selectedService?.name }}</span>
+      </div>
+      <div>
+        <span class="text-gray-600">Preço:</span>
+        <span class="font-medium ml-2">{{ currentBooking?.price }} {{ currentBooking?.currency }}</span>
+      </div>
+      <div>
+        <span class="text-gray-600">Localização:</span>
+        <span class="font-medium ml-2">{{ currentBooking?.location?.address }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buscando Prestadores -->
+  <div *ngIf="bookingStatus === 'searching_provider'" class="searching-providers bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Buscando Prestadores</h3>
+      <p class="text-gray-600">Encontrando os melhores profissionais próximos a você...</p>
+    </div>
+  </div>
+
+  <!-- Lista de Prestadores Disponíveis -->
+  <div *ngIf="bookingStatus === 'provider_assigned' && availableProviders.length > 0" 
+       class="providers-list bg-white rounded-lg shadow-md p-6 mb-6">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">Prestadores Disponíveis</h3>
+    
+    <div class="space-y-4">
+      <div *ngFor="let provider of availableProviders" 
+           class="provider-card border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors cursor-pointer"
+           (click)="selectProvider(provider)">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+              <span class="text-blue-600 font-semibold text-lg">
+                {{ provider.name.charAt(0) }}
+              </span>
+            </div>
+            
+            <div>
+              <h4 class="font-semibold text-gray-800">{{ provider.name }}</h4>
+              <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <span class="flex items-center">
+                  <svg class="w-4 h-4 text-yellow-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  {{ provider.rating }}
+                </span>
+                <span>•</span>
+                <span>{{ provider.totalJobs }} serviços</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-right">
+            <div class="text-sm text-gray-600">Distância</div>
+            <div class="font-semibold text-blue-600">2.5 km</div>
+            <div class="text-xs text-gray-500">~8 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prestador Selecionado -->
+  <div *ngIf="bookingStatus === 'provider_arriving'" class="provider-selected bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="text-center">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      
+      <h3 class="text-lg font-semibold text-gray-800 mb-2">Prestador Confirmado!</h3>
+      <p class="text-gray-600 mb-4">João Silva está a caminho do seu local</p>
+      
+      <div class="bg-blue-50 rounded-lg p-4">
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">Tempo estimado:</span>
+          <span class="font-semibold text-blue-600">8 minutos</span>
+        </div>
+        <div class="flex items-center justify-between text-sm mt-2">
+          <span class="text-gray-600">Distância:</span>
+          <span class="font-semibold text-blue-600">2.5 km</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botões de Ação -->
+  <div *ngIf="currentBooking" class="action-buttons flex space-x-4">
+    <button *ngIf="bookingStatus !== 'completed' && bookingStatus !== 'cancelled'"
+            (click)="cancelBooking()"
+            class="flex-1 bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+      Cancelar Serviço
+    </button>
+    
+    <button *ngIf="bookingStatus === 'completed'"
+            class="flex-1 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+      Avaliar Serviço
+    </button>
+  </div>
+
+  <!-- Mapa (placeholder) -->
+  <div *ngIf="currentBooking" class="map-container bg-gray-200 rounded-lg h-64 flex items-center justify-center mt-6">
+    <div class="text-center text-gray-500">
+      <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      <p>Mapa interativo</p>
+      <p class="text-sm">Tracking em tempo real</p>
+    </div>
+  </div>
+</div>
